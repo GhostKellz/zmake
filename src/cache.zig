@@ -58,7 +58,7 @@ pub const BuildCache = struct {
 
         const file = std.fs.cwd().openFile(index_path, .{}) catch |err| switch (err) {
             error.FileNotFound => {
-                print("==> Creating new cache index\n");
+                print("==> Creating new cache index\n", .{});
                 return;
             },
             else => return err,
@@ -237,7 +237,7 @@ pub const BuildCache = struct {
     fn cleanup(self: *BuildCache) !void {
         if (self.current_size <= self.max_size) return;
 
-        print("==> Cache size limit exceeded, cleaning up...\n");
+        print("==> Cache size limit exceeded, cleaning up...\n", .{});
 
         // Create list of entries sorted by LRU (least recently used)
         var entries = ArrayList(struct { hash: []const u8, entry: *CacheEntry }).init(self.allocator);
@@ -279,7 +279,7 @@ pub const BuildCache = struct {
     }
 
     pub fn getStats(self: *BuildCache) void {
-        print("==> Cache Statistics:\n");
+        print("==> Cache Statistics:\n", .{});
         print("    Entries: {d}\n", .{self.entries.count()});
         print("    Size: {d}MB / {d}MB\n", .{ self.current_size / 1024 / 1024, self.max_size / 1024 / 1024 });
         print("    Location: {s}\n", .{self.cache_dir});

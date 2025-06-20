@@ -1,6 +1,6 @@
 # Maintainer: GhostKellz <ghost@example.com>
 pkgname=zmake
-pkgver=0.1.0
+pkgver=0.2.0
 pkgrel=1
 pkgdesc="A modern makepkg/make replacement written in Zig with parallel processing, caching, and AUR integration"
 arch=('x86_64' 'aarch64')
@@ -22,7 +22,7 @@ build() {
     cd "$srcdir/$pkgname-$pkgver"
     
     # Build with optimizations
-    zig build -Drelease-fast --prefix /usr
+    zig build --release=fast --prefix /usr
 }
 
 check() {

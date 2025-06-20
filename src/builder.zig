@@ -53,7 +53,7 @@ pub const BuildContext = struct {
 };
 
 pub fn prepareBuild(ctx: *BuildContext) !void {
-    print("==> Preparing build environment...\n");
+    print("==> Preparing build environment...\n", .{});
 
     // Check dependencies first
     const missing_deps = try ctx.dep_resolver.checkDependencies(ctx.pkgbuild.depends);
@@ -72,7 +72,7 @@ pub fn prepareBuild(ctx: *BuildContext) !void {
     defer ctx.allocator.free(conflicts);
 
     if (conflicts.len > 0) {
-        print("❌ Package conflicts detected. Please resolve manually.\n");
+        print("❌ Package conflicts detected. Please resolve manually.\n", .{});
         return error.PackageConflicts;
     }
 
@@ -98,7 +98,7 @@ pub fn prepareBuild(ctx: *BuildContext) !void {
 
     if (ctx.cache.getCachedBuild(source_hash)) |cache_path| {
         defer ctx.allocator.free(cache_path);
-        print("==> Using cached build\n");
+        print("==> Using cached build\n", .{});
         try ctx.cache.extractBuild(cache_path, ctx.src_dir);
         return;
     }
@@ -143,7 +143,7 @@ pub fn buildPackage(ctx: *BuildContext) !void {
     defer result.deinit(ctx.allocator);
 
     if (!result.success) {
-        print("❌ prepare() function failed\n");
+        print("❌ prepare() function failed\n", .{});
         return error.PrepareFailed;
     }
 
@@ -152,7 +152,7 @@ pub fn buildPackage(ctx: *BuildContext) !void {
     defer result.deinit(ctx.allocator);
 
     if (!result.success) {
-        print("❌ build() function failed\n");
+        print("❌ build() function failed\n", .{});
         return error.BuildFailed;
     }
 
@@ -161,10 +161,10 @@ pub fn buildPackage(ctx: *BuildContext) !void {
     defer result.deinit(ctx.allocator);
 
     if (!result.success) {
-        print("⚠️  check() function failed, continuing anyway\n");
+        print("⚠️  check() function failed, continuing anyway\n", .{});
     }
 
-    print("✅ Build completed successfully\n");
+    print("✅ Build completed successfully\n", .{});
 
     // Cache the successful build
     const source_hash = try ctx.cache.computeSourceHash(ctx.pkgbuild.source, ctx.pkgbuild_content);
@@ -174,7 +174,7 @@ pub fn buildPackage(ctx: *BuildContext) !void {
 }
 
 pub fn packageFiles(ctx: *BuildContext) !void {
-    print("==> Packaging files...\n");
+    print("==> Packaging files...\n", .{});
 
     // Setup build environment for packaging
     var env = try executor.BuildEnvironment.init(ctx.allocator, &ctx.pkgbuild, ".");
@@ -185,7 +185,7 @@ pub fn packageFiles(ctx: *BuildContext) !void {
     defer result.deinit(ctx.allocator);
 
     if (!result.success) {
-        print("❌ package() function failed\n");
+        print("❌ package() function failed\n", .{});
         return error.PackageFailed;
     }
 
@@ -208,7 +208,7 @@ pub fn packageFiles(ctx: *BuildContext) !void {
 
 pub fn cleanBuild(allocator: Allocator) !void {
     _ = allocator;
-    print("==> Cleaning build artifacts...\n");
+    print("==> Cleaning build artifacts...\n", .{});
 
     // Remove build directories
     std.fs.cwd().deleteTree("build") catch |err| switch (err) {
@@ -226,5 +226,5 @@ pub fn cleanBuild(allocator: Allocator) !void {
         else => return err,
     };
 
-    print("==> Clean completed\n");
+    print("==> Clean completed\n", .{});
 }

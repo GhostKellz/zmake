@@ -141,7 +141,7 @@ pub fn analyzeZigProject(allocator: Allocator, project_dir: []const u8) !ZigProj
     defer allocator.free(zon_path);
 
     var name = try allocator.dupe(u8, "zig-project");
-    var version = try allocator.dupe(u8, "0.1.0");
+    var version = try allocator.dupe(u8, "0.2.0");
     const description: ?[]const u8 = null;
 
     if (std.fs.cwd().openFile(zon_path, .{})) |file| {
@@ -172,7 +172,7 @@ pub fn analyzeZigProject(allocator: Allocator, project_dir: []const u8) !ZigProj
             }
         }
     } else |_| {
-        print("⚠️  No build.zig.zon found, using defaults\n");
+        print("⚠️  No build.zig.zon found, using defaults\n", .{});
     }
 
     // Find source files and build targets
@@ -284,18 +284,18 @@ pub fn buildZigProject(allocator: Allocator, project: *const ZigProject, target:
     const result = try child.spawnAndWait();
 
     if (result != .Exited or result.Exited != 0) {
-        print("❌ Zig build failed\n");
+        print("❌ Zig build failed\n", .{});
         return error.BuildFailed;
     }
 
-    print("✅ Zig build completed successfully\n");
+    print("✅ Zig build completed successfully\n", .{});
 }
 
 pub fn buildCProject(allocator: Allocator, project: *const CProject, target: ?[]const u8, release_mode: bool) !void {
     print("==> Building C project: {s} v{s}\n", .{ project.name, project.version });
 
     if (project.sources.len == 0) {
-        print("❌ No source files found\n");
+        print("❌ No source files found\n", .{});
         return error.NoSources;
     }
 
@@ -321,9 +321,7 @@ pub fn buildCProject(allocator: Allocator, project: *const CProject, target: ?[]
 
     // Add target if specified
     if (target) |tgt| {
-        const target_arg = try std.fmt.allocPrint(allocator, "-target");
-        defer allocator.free(target_arg);
-        try args.append(target_arg);
+        try args.append("-target");
         try args.append(tgt);
     }
 
@@ -333,9 +331,7 @@ pub fn buildCProject(allocator: Allocator, project: *const CProject, target: ?[]
     }
 
     // Add output
-    const output_name = try std.fmt.allocPrint(allocator, "-o");
-    defer allocator.free(output_name);
-    try args.append(output_name);
+    try args.append("-o");
     try args.append(project.name);
 
     // Add linker flags
@@ -350,15 +346,15 @@ pub fn buildCProject(allocator: Allocator, project: *const CProject, target: ?[]
     const result = try child.spawnAndWait();
 
     if (result != .Exited or result.Exited != 0) {
-        print("❌ C compilation failed\n");
+        print("❌ C compilation failed\n", .{});
         return error.BuildFailed;
     }
 
-    print("✅ C build completed successfully\n");
+    print("✅ C build completed successfully\n", .{});
 }
 
 pub fn createNativePackage(allocator: Allocator, project: *const NativeProject, output_dir: []const u8) !void {
-    print("==> Creating native package...\n");
+    print("==> Creating native package...\n", .{});
 
     // Create package directory structure
     const pkg_name = switch (project.*) {

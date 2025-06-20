@@ -237,7 +237,7 @@ pub const PackageArchiver = struct {
 
     pub fn signPackage(self: *PackageArchiver, package_path: []const u8, gpg_key: ?[]const u8) !void {
         const key_arg = gpg_key orelse {
-            print("⚠️  No GPG key specified, skipping package signing\n");
+            print("⚠️  No GPG key specified, skipping package signing\n", .{});
             return;
         };
 
@@ -261,7 +261,7 @@ pub const PackageArchiver = struct {
         const result = try child.spawnAndWait();
 
         if (result != .Exited or result.Exited != 0) {
-            print("❌ GPG signing failed\n");
+            print("❌ GPG signing failed\n", .{});
             return error.SigningFailed;
         }
 
@@ -302,16 +302,16 @@ pub const PackageArchiver = struct {
         const has_mtree = std.mem.indexOf(u8, stdout, ".MTREE") != null;
 
         if (!has_pkginfo) {
-            print("❌ Package missing .PKGINFO\n");
+            print("❌ Package missing .PKGINFO\n", .{});
             return false;
         }
 
         if (!has_mtree) {
-            print("❌ Package missing .MTREE\n");
+            print("❌ Package missing .MTREE\n", .{});
             return false;
         }
 
-        print("✅ Package verification passed\n");
+        print("✅ Package verification passed\n", .{});
         return true;
     }
 };

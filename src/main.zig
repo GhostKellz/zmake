@@ -56,7 +56,7 @@ pub fn main() !void {
         },
         .cross_compile => {
             if (args.len < 3) {
-                print("❌ Usage: zmake cross <target> [--release]\n");
+                print("❌ Usage: zmake cross <target> [--release]\n", .{});
                 return;
             }
             const target = args[2];
@@ -111,7 +111,7 @@ fn showHelp() !void {
 }
 
 fn showVersion() !void {
-    print("zmake v0.1.0 - A Modern makepkg/make Replacement\n", .{});
+    print("zmake v0.2.0 - A Modern makepkg/make Replacement\n", .{});
     print("Built with Zig v0.15.0\n", .{});
     print("Copyright (c) 2024 GhostKellz\n", .{});
     print("Licensed under MIT License\n", .{});
@@ -218,7 +218,7 @@ fn detectProjectType(allocator: Allocator, project_dir: []const u8) !void {
     switch (project_type) {
         .zig => {
             print("✅ Detected: Zig Project\n", .{});
-            const zig_project = native.analyzeZigProject(allocator, project_dir) catch |err| {
+            var zig_project = native.analyzeZigProject(allocator, project_dir) catch |err| {
                 print("⚠️  Failed to analyze Zig project: {}\n", .{err});
                 return;
             };
@@ -229,7 +229,7 @@ fn detectProjectType(allocator: Allocator, project_dir: []const u8) !void {
         },
         .c => {
             print("✅ Detected: C Project\n", .{});
-            const c_project = native.analyzeCProject(allocator, project_dir) catch |err| {
+            var c_project = native.analyzeCProject(allocator, project_dir) catch |err| {
                 print("⚠️  Failed to analyze C project: {}\n", .{err});
                 return;
             };
@@ -240,7 +240,7 @@ fn detectProjectType(allocator: Allocator, project_dir: []const u8) !void {
         },
         .cpp => {
             print("✅ Detected: C++ Project\n", .{});
-            const cpp_project = native.analyzeCProject(allocator, project_dir) catch |err| {
+            var cpp_project = native.analyzeCProject(allocator, project_dir) catch |err| {
                 print("⚠️  Failed to analyze C++ project: {}\n", .{err});
                 return;
             };
@@ -277,7 +277,7 @@ fn compileNativeProject(allocator: Allocator, project_dir: []const u8, target: ?
     switch (project_type) {
         .zig => {
             print("✅ Detected: Zig Project\n", .{});
-            const zig_project = native.analyzeZigProject(allocator, project_dir) catch |err| {
+            var zig_project = native.analyzeZigProject(allocator, project_dir) catch |err| {
                 print("❌ Failed to analyze Zig project: {}\n", .{err});
                 return;
             };
@@ -292,7 +292,7 @@ fn compileNativeProject(allocator: Allocator, project_dir: []const u8, target: ?
         },
         .c => {
             print("✅ Detected: C Project\n", .{});
-            const c_project = native.analyzeCProject(allocator, project_dir) catch |err| {
+            var c_project = native.analyzeCProject(allocator, project_dir) catch |err| {
                 print("❌ Failed to analyze C project: {}\n", .{err});
                 return;
             };
@@ -307,7 +307,7 @@ fn compileNativeProject(allocator: Allocator, project_dir: []const u8, target: ?
         },
         .cpp => {
             print("✅ Detected: C++ Project\n", .{});
-            const cpp_project = native.analyzeCProject(allocator, project_dir) catch |err| {
+            var cpp_project = native.analyzeCProject(allocator, project_dir) catch |err| {
                 print("❌ Failed to analyze C++ project: {}\n", .{err});
                 return;
             };

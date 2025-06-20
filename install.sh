@@ -111,7 +111,7 @@ install_from_source() {
     
     # Build zmake
     info "Building zmake with Zig..."
-    zig build -Drelease-fast
+    zig build --release=fast
     
     # Install binary
     info "Installing zmake to /usr/local/bin..."

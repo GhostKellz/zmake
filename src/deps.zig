@@ -93,7 +93,7 @@ pub const DependencyResolver = struct {
     }
 
     fn loadInstalledPackages(self: *DependencyResolver) !void {
-        print("==> Loading installed packages from pacman database...\n");
+        print("==> Loading installed packages from pacman database...\n", .{});
 
         // Query pacman for installed packages
         var child = std.process.Child.init(&[_][]const u8{ "pacman", "-Q" }, self.allocator);
@@ -106,18 +106,18 @@ pub const DependencyResolver = struct {
         };
 
         const stdout = child.stdout.?.readToEndAlloc(self.allocator, 10 * 1024 * 1024) catch {
-            print("⚠️  Failed to read pacman output\n");
+            print("⚠️  Failed to read pacman output\n", .{});
             return;
         };
         defer self.allocator.free(stdout);
 
         const result = child.wait() catch {
-            print("⚠️  Pacman query failed\n");
+            print("⚠️  Pacman query failed\n", .{});
             return;
         };
 
         if (result != .Exited or result.Exited != 0) {
-            print("⚠️  Pacman returned error code\n");
+            print("⚠️  Pacman returned error code\n", .{});
             return;
         }
 
@@ -150,7 +150,7 @@ pub const DependencyResolver = struct {
         var missing_deps = ArrayList(Dependency).init(self.allocator);
         defer missing_deps.deinit();
 
-        print("==> Checking dependencies...\n");
+        print("==> Checking dependencies...\n", .{});
 
         for (deps) |dep_string| {
             var dep = try Dependency.parse(self.allocator, dep_string);
@@ -205,11 +205,11 @@ pub const DependencyResolver = struct {
 
         if (missing_deps.len == 0) return;
 
-        print("\n==> Missing dependencies can potentially be found in AUR:\n");
+        print("\n==> Missing dependencies can potentially be found in AUR:\n", .{});
         for (missing_deps) |dep| {
             print("    yay -S {s}\n", .{dep.name});
         }
-        print("💡 Run these commands or implement AUR support in zmake\n");
+        print("💡 Run these commands or implement AUR support in zmake\n", .{});
     }
 };
 
@@ -240,7 +240,7 @@ pub fn checkConflicts(allocator: Allocator, conflicts: []const []const u8, resol
 
     if (conflicts.len == 0) return &[_][]const u8{};
 
-    print("==> Checking for conflicts...\n");
+    print("==> Checking for conflicts...\n", .{});
 
     for (conflicts) |conflict_name| {
         if (resolver.installed_packages.contains(conflict_name)) {

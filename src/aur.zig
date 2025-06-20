@@ -167,7 +167,7 @@ pub const AurClient = struct {
     }
 
     pub fn resolveDependencies(self: *AurClient, package_names: []const []const u8) ![][]const u8 {
-        print("==> Resolving AUR dependencies...\n");
+        print("==> Resolving AUR dependencies...\n", .{});
 
         var resolved = ArrayList([]const u8).init(self.allocator);
         defer resolved.deinit();
@@ -242,7 +242,7 @@ pub const AurClient = struct {
 pub fn installAurDependencies(allocator: Allocator, aur_deps: []const []const u8) !void {
     if (aur_deps.len == 0) return;
 
-    print("==> Installing AUR dependencies...\n");
+    print("==> Installing AUR dependencies...\n", .{});
 
     var aur_client = try AurClient.init(allocator);
     defer aur_client.deinit();
@@ -268,11 +268,11 @@ pub fn installAurDependencies(allocator: Allocator, aur_deps: []const []const u8
         }
     }
 
-    print("🎉 All AUR dependencies installed successfully!\n");
+    print("🎉 All AUR dependencies installed successfully!\n", .{});
 }
 
 pub fn checkAurUpdates(allocator: Allocator, packages: []const []const u8) !void {
-    print("==> Checking AUR packages for updates...\n");
+    print("==> Checking AUR packages for updates...\n", .{});
 
     var aur_client = try AurClient.init(allocator);
     defer aur_client.deinit();

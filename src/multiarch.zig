@@ -266,8 +266,8 @@ pub const MultiArchBuilder = struct {
     }
 
     pub fn generateBuildReport(self: *MultiArchBuilder, results: []const BuildResult) !void {
-        print("\n==> Multi-Architecture Build Report\n");
-        print("====================================\n");
+        print("\n==> Multi-Architecture Build Report\n", .{});
+        print("====================================\n", .{});
 
         var successful: u32 = 0;
         var failed: u32 = 0;
@@ -296,7 +296,7 @@ pub const MultiArchBuilder = struct {
             }
         }
 
-        print("------------------------------------\n");
+        print("------------------------------------\n", .{});
         print("Summary: {d} successful, {d} failed\n", .{ successful, failed });
         print("Total build time: {d}ms\n", .{total_time});
         print("Total package size: {d}MB\n", .{total_size / 1024 / 1024});

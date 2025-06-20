@@ -133,7 +133,7 @@ pub fn deinitZmkConfig(self: *ZmkConfig) void {
 }
 
 pub fn parseZmkToml(allocator: Allocator, content: []const u8) !ZmkConfig {
-    print("==> Parsing zmk.toml configuration...\n");
+    print("==> Parsing zmk.toml configuration...\n", .{});
 
     // For now, implement a simple TOML-like parser
     // In production, use a proper TOML library
